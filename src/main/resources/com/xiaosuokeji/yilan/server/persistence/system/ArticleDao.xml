@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.system.ArticleDao">
+
+	<insert id="save" parameterType="article" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO yilanwang.article(title,content,url,publisher)
+		VALUES (#{title},#{content},#{url},#{publisher})
+	</insert>
+
+	<delete id="remove" parameterType="article">
+		DELETE FROM yilanwang.article
+		WHERE id=#{id}
+	</delete>
+
+	<update id="update" parameterType="article">
+		UPDATE yilanwang.article
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="title!=null">
+				,title=#{title}
+			</if>
+			<if test="content!=null">
+				,content=#{content}
+			</if>
+			<if test="url!=null">
+				,url=#{url}
+			</if>
+			,update_time=NOW()
+		</trim>
+		WHERE id=#{id}
+	</update>
+
+	<select id="get" parameterType="article" resultType="article">
+		SELECT *
+		FROM yilanwang.article
+		WHERE id=#{id}
+	</select>
+
+	<sql id="listCondition">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="title!=null and title!=''">
+				AND title=#{title}
+			</if>
+			<if test="dynamic!=null and dynamic.title!=null and dynamic.title!=''">
+				AND title LIKE CONCAT('%',#{dynamic.title},'%')
+			</if>
+			<if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+				AND create_time &gt;= #{dynamic.startTime}
+			</if>
+			<if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+				AND create_time &lt;= #{dynamic.endTime}
+			</if>
+		</trim>
+	</sql>
+
+	<select id="list" parameterType="article" resultType="article">
+		SELECT *
+		FROM yilanwang.article
+		<include refid="listCondition" />
+		<include refid="BaseMapper.sort" />
+		<include refid="BaseMapper.limit" />
+	</select>
+
+	<select id="count" parameterType="article" resultType="long">
+		SELECT COUNT(*)
+		FROM yilanwang.article
+		<include refid="listCondition" />
+	</select>
+</mapper>

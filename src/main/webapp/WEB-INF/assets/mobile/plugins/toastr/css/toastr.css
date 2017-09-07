@@ -1,0 +1,288 @@
+/*
+ * Note that this is toastr v2.1.3, the "latest" version in url has no more maintenance,
+ * please go to https://cdnjs.com/libraries/toastr.js and pick a certain version you want to use,
+ * make sure you copy the url from the website since the url may change between versions.
+ * */
+.toast-title {
+    font-weight: bold;
+}
+
+.toast-message {
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.toast-message a,
+.toast-message label {
+    color: #FFFFFF;
+}
+
+.toast-message a:hover {
+    color: #CCCCCC;
+    text-decoration: none;
+}
+
+.toast-close-button {
+    position: relative;
+    right: -0.3em;
+    top: -0.3em;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+    -webkit-text-shadow: 0 1px 0 #ffffff;
+    text-shadow: 0 1px 0 #ffffff;
+    opacity: 0.8;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+    filter: alpha(opacity=80);
+    line-height: 1;
+}
+
+.toast-close-button:hover,
+.toast-close-button:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.4;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+    filter: alpha(opacity=40);
+}
+
+.rtl .toast-close-button {
+    left: -0.3em;
+    float: left;
+    right: 0.3em;
+}
+
+/*Additional properties for button version
+ iOS requires the button element instead of an anchor tag.
+ If you want the anchor version, it requires `href="#"`.*/
+button.toast-close-button {
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+.toast-top-center {
+    top: 0;
+    right: 0;
+    width: 100%;
+}
+
+.toast-bottom-center {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+.toast-top-full-width {
+    top: 0;
+    right: 0;
+    width: 100%;
+}
+
+.toast-bottom-full-width {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+.toast-top-left {
+    top: 12px;
+    left: 12px;
+}
+
+.toast-top-right {
+    top: 12px;
+    right: 12px;
+}
+
+.toast-bottom-right {
+    right: 12px;
+    bottom: 12px;
+}
+
+.toast-bottom-left {
+    bottom: 12px;
+    left: 12px;
+}
+
+.toast-center-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%); /* IE 9 */
+    -moz-transform: translate(-50%, -50%); /* Firefox */
+    -webkit-transform: translate(-50%, -50%); /* Safari 和 Chrome */
+    -o-transform: translate(-50%, -50%); /* Opera */
+}
+
+#toast-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+    /*overrides*/
+}
+
+#toast-container * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#toast-container > div {
+    position: relative;
+    pointer-events: auto;
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 15px !important;
+    width: 300px;
+    font-size: 18px;
+    /*-moz-border-radius: 3px 3px 3px 3px;*/
+    /*-webkit-border-radius: 3px 3px 3px 3px;*/
+    /*border-radius: 3px 3px 3px 3px;*/
+
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    -moz-box-shadow: 0 0 12px #999999;
+    -webkit-box-shadow: 0 0 12px #999999;
+    box-shadow: 0 0 12px #999999;
+    color: #FFFFFF;
+    opacity: 0.8;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+    filter: alpha(opacity=80);
+}
+
+#toast-container > div.rtl {
+    direction: rtl;
+    padding: 15px 50px 15px 15px;
+    background-position: right 15px center;
+}
+
+#toast-container > div:hover {
+    -moz-box-shadow: 0 0 12px #000000;
+    -webkit-box-shadow: 0 0 12px #000000;
+    box-shadow: 0 0 12px #000000;
+    opacity: 1;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    filter: alpha(opacity=100);
+    cursor: pointer;
+}
+
+/*#toast-container > .toast-info {*/
+    /*background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAAASAAAAEgARslrPgAABGFJREFUaN7FWctLVFEYP+c65YhGlFRYYpo9fZBKLxcugsClm+h/aCO0iKAkiog22UJRoyhw1aqFSJAuaqAyEIQkkx6bWjSGzSZI01G/r8VvPuvcOTPO3Huc+TY/zut73/Odc65WBSZmZuadO9Haswe4vAxcXATOz2uttdZEhdbPkYH19cCrV4EvXgAXFjgn+vULGIsxMTH19KBdV1ds+zIY3NoKHBkBrq3lZmi+RAR89gyOaW4Oq78OZnA0qlix4tu3lVZa6e5ujEYi6QsUK/74EfPGx9H59Stwft6cLJ9EbS2wsxN4+LBdG/lE+vog58oV7WlPe8mkswiv20FMTLt3wwETE/YIrawAh4aAR4+GlsvMzMeOQf6DB6YcP01OAquqNsnwL1/sgl+9Ah454tzzWR3y9q1dn9lZjEtGBRZUVpZd0OPHGN+6dbMNT9OPmJhKS6HH8LBdv6kpmRdQQG9v+j7ExPToUTjHag28eRN45w6wpCQcX4sjiInp3r08GbW1AVdX01I9ZMSxvqnJHrH29nB8S0vtGSvVo6UlRwdIORNKJsH40KGgCpqKbtliRuzJE2A0Gpo/MzM3NNgDODq6gWIHD2Kiv44PDoZVzK7ovn2CzvkTE9PDh/ZPwlJWMXrtmn1B8MhLZMGnuxttKaOSmktLrjLMlCuZ4LenpyfDgljMnD0z40aR69d5IyImJjn4uCMw//TJFPb6tYx76PA8NM+c+bdSseKxMTdqfPgAlBPaz5+uDc1OfjuOHxe7PRi6axcG/PXy27ewonGre/oUcsrL0dvVVVgHyNFbqKICWFWVinymE9PcnCsVcEZfXS2s4ULxuL1/2zYPl5SVFfsE5uIo7Jos7wqsWHEkkvoEfv9Om6CVVtrhpaKoZMlwrbTSiUQqA+JxOGJhwfRQTU2xVXdD9fVme2kJ9iUSHjaptTU4Ynra9JD7slQcOnfObE9Oyp7kmQPyYCHU3Ixy4ffgJpBWWmm5JJ09i3PB+fNo64APN6J3Y6M5GoulL0gdEe2nlL4+V3aCX3u7XU4iYe/Pv2xinTzMrJ+2SI78GywcGzMXLi+7yoTsDvCTPI76I7gR/7o64J8/5knTn+E2BsTEdOLEuscMBi9fym0unAMOHAD6b2ufPwMvXQLu2JEzX2JiikSw7s0bk69c7tra8lR0YMAemfv3g+fA/wqfPr3+zQf81k1+ly/b9R0YCBipaBT47l0mR4TNCFcEffr7Tf1E7xDvDGAg93ZJUT/JD4wsm0tBHFBeDrxwAVhZ6VjA3r3A6Wm7I5JJMxIONk1iYtq/H3j3LvjG48Bbt8LyD/5jRCmlVG8v8OLFFLsM/N6/x8lrfBz1Xm6Z378D5ZJUWYl5jY2Y19GB/pMn7fxnZnCQC/+HKDAhMqdOwTH+8umapCo9fw7MY1cvmEOY+d9T1I0bQPljs7iYm6HyCCuvu/J83tDgWt/AZSeYY0pKkOLV1ejdvh2pLlXkxw/g3Fyhfo//BevXFYx1Ei5UAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA4LTMxVDEzOjA4OjI4KzA4OjAwbJ8apgAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wOC0zMVQxMzowODoyOCswODowMB3CohoAAABrdEVYdHN2ZzpiYXNlLXVyaQBmaWxlOi8vL2hvbWUvYWRtaW4vaWNvbi1mb250L3RtcC9pY29uX3pia3ZpM28xcmYzd2hmci8lRTUlODUlQjMlRTQlQkElOEUlRTYlODglOTElRTQlQkIlQUMuc3Znr8DCvAAAAABJRU5ErkJggg==") !important;*/
+/*}*/
+
+/*#toast-container > .toast-error {*/
+    /*background-image: url("data:image/png;base64,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") !important;*/
+/*}*/
+
+/*#toast-container > .toast-success {*/
+    /*background-image: url("data:image/png;base64,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") !important;*/
+/*}*/
+
+/*#toast-container > .toast-warning {*/
+    /*background-image: url("data:image/png;base64,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") !important;*/
+/*}*/
+
+#toast-container.toast-top-center > div,
+#toast-container.toast-bottom-center > div {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#toast-container.toast-top-full-width > div,
+#toast-container.toast-bottom-full-width > div {
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.toast {
+    background-color: #030303;
+}
+
+.toast-success {
+    background-color: #33AC79;
+}
+
+.toast-error {
+    background-color: #f05050;
+}
+
+.toast-info {
+    background-color: #23b7e5;
+}
+
+.toast-warning {
+    background-color: #fad733;
+}
+
+.toast-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: #000000;
+    opacity: 0.4;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+    filter: alpha(opacity=40);
+}
+
+/*Responsive Design*/
+@media all and (max-width: 240px) {
+    #toast-container > div {
+        padding: 8px 8px 8px 50px;
+        width: 11em;
+    }
+
+    #toast-container > div.rtl {
+        padding: 8px 50px 8px 8px;
+    }
+
+    #toast-container .toast-close-button {
+        right: -0.2em;
+        top: -0.2em;
+    }
+
+    #toast-container .rtl .toast-close-button {
+        left: -0.2em;
+        right: 0.2em;
+    }
+}
+
+@media all and (min-width: 241px) and (max-width: 480px) {
+    #toast-container > div {
+        padding: 8px 8px 8px 50px;
+        width: 18em;
+    }
+
+    #toast-container > div.rtl {
+        padding: 8px 50px 8px 8px;
+    }
+
+    #toast-container .toast-close-button {
+        right: -0.2em;
+        top: -0.2em;
+    }
+
+    #toast-container .rtl .toast-close-button {
+        left: -0.2em;
+        right: 0.2em;
+    }
+}
+
+@media all and (min-width: 481px) and (max-width: 768px) {
+    #toast-container > div {
+        padding: 15px 15px 15px 50px;
+        width: 25em;
+    }
+
+    #toast-container > div.rtl {
+        padding: 15px 50px 15px 15px;
+    }
+}

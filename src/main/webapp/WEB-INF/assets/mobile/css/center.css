@@ -1,0 +1,41 @@
+.form-group {
+    margin-top: 3.5%;
+}
+
+.position-div {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.position-div a {
+    margin-left: 0;
+    line-height: 40px;
+    font-size: 11px;
+    color: #33AC79;
+    letter-spacing: -0.27px;
+    position: absolute;
+    right: 5%;
+    top: 0;
+    text-decoration: none;
+}
+
+.position-div p {
+    position: absolute;
+    top: 31%;
+    font-size: 12px;
+    left: 4%;
+    color: #666;
+}
+
+.input-style {
+    font-size: 12px;
+    padding-left: 24.1%;
+    padding-right: 24.1%;
+}
+
+.input-style:disabled{
+    background-color:#FFFFFF;
+    opacity: 1;
+    color: #999;
+}
+

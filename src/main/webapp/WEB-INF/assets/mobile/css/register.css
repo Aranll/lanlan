@@ -1,0 +1,95 @@
+.form-group {
+    padding-top: 20px;
+}
+
+p {
+    font-size: 12px;
+    color: #666666;
+    letter-spacing: 0.29px;
+
+}
+
+.input-style {
+    padding-left: 90px;
+}
+
+/*.form-group .position-div:nth-child(2) .input-style,*/
+/*.form-group .position-div:nth-child(3) .input-style {*/
+    /*padding-left: 36%;*/
+/*}*/
+
+.position-div {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.position-div p {
+    position: absolute;
+    line-height: 40px;
+    left: 10px;
+}
+.form-group .position-div:nth-child(2) .input-style,
+.form-group .position-div:nth-child(3) .input-style{
+    width: 60%;
+}
+
+#securityCode {
+    height: 40px;
+    width:35%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#get_verification {
+    display: inline-block;
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: -0.31px;
+    background: #33AC79;
+    border-radius: 4px;
+    width: 35%;
+    height: 40px;
+    border: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    outline: none;
+}
+
+.reset-button {
+    display: inline-block;
+    width: 45.2%;
+    height: 49px;
+    font-size: 18px;
+    color: #FFFFFF;
+    letter-spacing: 0.34px;
+    background: #CCCCCC;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    float: left;
+}
+
+.register-button {
+    display: inline-block;
+    width: 45.2%;
+    height: 49px;
+    padding: 0;
+    font-size: 18px;
+    color: #FFFFFF;
+    letter-spacing: 0.34px;
+    background: #33AC79;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    float: right;
+}
+
+input[type=button]:disabled{
+    opacity:0.6;
+}
+
+.register-group{
+    margin-top: 20px;
+}

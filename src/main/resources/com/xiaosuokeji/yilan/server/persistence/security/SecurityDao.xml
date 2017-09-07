@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.security.SecurityDao">
+
+    <insert id="insertResource" parameterType="secResource" keyProperty="id" useGeneratedKeys="true">
+        INSERT IGNORE INTO yilanwang.security_resource(pid,`key`,`type`,`name`,url,method,icon,seq,log)
+        VALUES (#{pid},#{key},#{type},#{name},#{url},#{method},#{icon},#{seq},#{log})
+    </insert>
+
+    <delete id="deleteResource" parameterType="secResource">
+        DELETE FROM yilanwang.security_resource WHERE id=#{id}
+    </delete>
+
+    <select id="findResource" parameterType="secResource" resultType="secResource">
+        SELECT r1.*,r2.name AS pName
+        FROM yilanwang.security_resource r1 LEFT JOIN yilanwang.security_resource r2 ON r1.pid=r2.id
+        WHERE r1.id=#{id}
+    </select>
+
+    <update id="updateResource" parameterType="secResource">
+        UPDATE yilanwang.security_resource
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="pid!=null">
+                ,pid=#{pid}
+            </if>
+            <if test="key!=null">
+                ,`key`=#{key}
+            </if>
+            <if test="type!=null">
+                ,`type`=#{type}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="url!=null">
+                ,url=#{url}
+            </if>
+            <if test="method!=null">
+                ,method=#{method}
+            </if>
+            <if test="icon!=null">
+                ,icon=#{icon}
+            </if>
+            <if test="seq!=null">
+                ,seq=#{seq}
+            </if>
+            <if test="log!=null">
+                ,log=#{log}
+            </if>
+            ,update_time=now()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <sql id="listResourceCondition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="pid!=null">
+                AND pid=#{pid}
+            </if>
+            <if test="key!=null and key!=''">
+                AND `key` LIKE CONCAT('%',#{key},'%')
+            </if>
+            <if test="type!=null">
+                AND `type`=#{type}
+            </if>
+            <if test="name!=null and name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="url!=null and url!=''">
+                AND url LIKE CONCAT('%',#{url},'%')
+            </if>
+            <if test="method!=null and method!=''">
+                AND method LIKE CONCAT('%',#{method},'%')
+            </if>
+        </trim>
+    </sql>
+
+    <select id="listResource" parameterType="secResource" resultType="secResource">
+        SELECT id,pid,`key`,`type`,`name`,url,method 
+        FROM yilanwang.security_resource
+        <include refid="listResourceCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="countResource" parameterType="secResource" resultType="long">
+        SELECT COUNT(*) FROM yilanwang.security_resource
+        <include refid="listResourceCondition" />
+    </select>
+
+    <select id="findResourceByKey" parameterType="secResource" resultType="secResource">
+        SELECT * FROM yilanwang.security_resource WHERE `key`=#{key}
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
+    </select>
+
+    <select id="listResourceTree" resultType="secResource">
+        SELECT id,`name`,pid
+        FROM yilanwang.security_resource
+        WHERE `type`!=2
+        ORDER BY seq DESC
+    </select>
+
+    <select id="countRoleByRes" parameterType="secResource" resultType="long">
+        SELECT COUNT(*)
+        FROM yilanwang.security_role_res srr JOIN yilanwang.security_role sr ON srr.roleId=sr.id
+        WHERE srr.resId=#{id} AND sr.superior=0
+    </select>
+
+    <insert id="insertRole" parameterType="secRole">
+        INSERT IGNORE INTO yilanwang.security_role(`name`,`desc`,status)
+        VALUES (#{name},#{desc},#{status})
+    </insert>
+
+    <delete id="deleteRole" parameterType="secRole">
+        DELETE FROM yilanwang.security_role WHERE id=#{id} AND superior=0
+    </delete>
+
+    <select id="findRole" parameterType="secRole" resultType="secRole">
+        SELECT * FROM yilanwang.security_role
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="superior!=null">
+                AND superior=#{superior}
+            </if>
+            AND id=#{id}
+        </trim>
+    </select>
+
+    <update id="updateRole" parameterType="secRole">
+        UPDATE yilanwang.security_role
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            ,update_time=now()
+        </trim>
+        WHERE id=#{id} AND superior=0
+    </update>
+
+    <sql id="listRoleCondition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            AND superior=0
+        </trim>
+    </sql>
+
+    <select id="listRole" parameterType="secRole" resultType="secRole">
+        SELECT id,`name`,`desc`,status
+        FROM yilanwang.security_role
+        <include refid="listRoleCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="countRole" parameterType="secRole" resultType="long">
+        SELECT COUNT(*) FROM yilanwang.security_role
+        <include refid="listRoleCondition" />
+    </select>
+
+    <select id="findRoleByKey" parameterType="secRole" resultType="secRole">
+        SELECT * FROM yilanwang.security_role WHERE `name`=#{name}
+        <if test="id!=null">
+            AND id!=#{id}
+        </if>
+    </select>
+
+    <select id="listRolePair" resultType="secRole">
+        SELECT id,`name` FROM yilanwang.security_role WHERE superior=0
+    </select>
+
+    <select id="countStaffByRole" parameterType="secRole" resultType="long">
+        SELECT COUNT(*)
+        FROM yilanwang.security_staff_role
+        WHERE roleId=#{id}
+    </select>
+
+    <select id="countOrgByRole" parameterType="secRole" resultType="long">
+        SELECT COUNT(*)
+        FROM yilanwang.security_org_role
+        WHERE roleId=#{id}
+    </select>
+
+    <select id="listResourceByRole" parameterType="secRole" resultType="secResource">
+        SELECT srr.resId AS id
+        FROM yilanwang.security_role_res srr JOIN yilanwang.security_resource sr ON srr.resId=sr.id
+        WHERE srr.roleId=#{id} AND sr.type!=2
+    </select>
+
+    <insert id="insertRoleRes" parameterType="secRole">
+        INSERT IGNORE INTO yilanwang.security_role_res
+        SELECT #{id},id
+        FROM yilanwang.security_resource
+        WHERE id IN
+        <foreach collection="resources" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+        UNION
+        SELECT #{id},r2.id
+        FROM yilanwang.security_resource r1 JOIN yilanwang.security_resource r2 ON r1.id=r2.pid
+        WHERE  r1.id IN
+        <foreach collection="resources" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+        AND r1.type=1
+    </insert>
+
+    <delete id="deleteRoleRes" parameterType="secRole">
+        DELETE FROM yilanwang.security_role_res WHERE roleId=#{id}
+        AND resId IN (
+            SELECT id
+            FROM yilanwang.security_resource
+            WHERE id IN
+            <foreach collection="resources" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+            UNION
+            SELECT r2.id
+            FROM yilanwang.security_resource r1 JOIN yilanwang.security_resource r2 ON r1.id=r2.pid
+            WHERE r1.id IN
+            <foreach collection="resources" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+            AND r1.type=1
+        )
+    </delete>
+
+    <delete id="deleteRoleResByRole" parameterType="secRole">
+        DELETE FROM yilanwang.security_role_res WHERE roleId=#{id}
+    </delete>
+
+    <insert id="insertStaff" parameterType="secStaff">
+        INSERT IGNORE INTO yilanwang.security_staff(username,password,status,`name`,mobile,email,qq)
+        VALUES (#{username},md5(#{password}),#{status},#{name},#{mobile},#{email},#{qq})
+    </insert>
+
+    <delete id="deleteStaff" parameterType="secStaff">
+        DELETE FROM yilanwang.security_staff WHERE id=#{id} AND superior=0
+    </delete>
+
+    <select id="findStaff" parameterType="secStaff" resultType="secStaff">
+        SELECT * FROM yilanwang.security_staff
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="superior!=null">
+                AND superior=#{superior}
+            </if>
+            AND id=#{id}
+        </trim>
+    </select>
+
+    <update id="updateStaff" parameterType="secStaff">
+        UPDATE yilanwang.security_staff
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="username!=null">
+                ,username=#{username}
+            </if>
+            <if test="password!=null">
+                ,password=md5(#{password})
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="mobile!=null">
+                ,mobile=#{mobile}
+            </if>
+            <if test="email!=null">
+                ,email=#{email}
+            </if>
+            <if test="qq!=null">
+                ,qq=#{qq}
+            </if>
+            ,update_time=now()
+        </trim>
+        WHERE id=#{id} AND superior=0
+    </update>
+
+    <sql id="listStaffCondition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="username!=null and username!=''">
+                AND username LIKE CONCAT('%',#{username},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            <if test="name!=null and name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="mobile!=null and mobile!=''">
+                AND mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            AND superior=0
+        </trim>
+    </sql>
+
+    <select id="listStaff" parameterType="secStaff" resultType="secStaff">
+        SELECT id,username,`name`,mobile,status FROM yilanwang.security_staff
+        <include refid="listStaffCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="countStaff" parameterType="secStaff" resultType="long">
+        SELECT COUNT(*) FROM yilanwang.security_staff
+        <include refid="listStaffCondition" />
+    </select>
+
+    <select id="findStaffByKey" parameterType="secStaff" resultType="secStaff">
+        SELECT * FROM yilanwang.security_staff WHERE username=#{username}
+        <if test="id!=null">
+            AND id!=#{id}
+        </if>
+    </select>
+
+    <select id="listRoleByStaff" parameterType="secStaff" resultType="secRole">
+        SELECT sr.id AS id
+        FROM yilanwang.security_staff_role ssr JOIN yilanwang.security_role sr ON ssr.roleId=sr.id
+        WHERE ssr.staffId=#{id}
+        <if test="status!=null">
+            AND sr.status=#{status}
+        </if>
+    </select>
+
+    <insert id="insertStaffRole" parameterType="secStaff">
+        INSERT IGNORE INTO yilanwang.security_staff_role
+        <foreach collection="roles" item="item" separator="," open="VALUES ">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="deleteStaffRole" parameterType="secStaff">
+        DELETE FROM yilanwang.security_staff_role WHERE staffId=#{id}
+        AND roleId IN
+        <foreach collection="roles" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteStaffRoleByStaff" parameterType="secStaff">
+        DELETE FROM yilanwang.security_staff_role WHERE staffId=#{id}
+    </delete>
+
+    <insert id="insertOrganization" parameterType="secOrganization">
+        INSERT IGNORE INTO yilanwang.security_organization(pid,`name`,`desc`,status)
+        VALUES (#{pid},#{name},#{desc},#{status})
+    </insert>
+
+    <delete id="deleteOrganization" parameterType="secOrganization">
+        DELETE FROM yilanwang.security_organization WHERE id=#{id}
+    </delete>
+
+    <select id="findOrganization" parameterType="secOrganization" resultType="secOrganization">
+        SELECT o1.*,o2.name AS pName
+        FROM yilanwang.security_organization o1 LEFT JOIN yilanwang.security_organization o2 ON o1.pid=o2.id
+        WHERE o1.id=#{id}
+    </select>
+
+    <update id="updateOrganization" parameterType="secOrganization">
+        UPDATE yilanwang.security_organization
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="pid!=null">
+                ,pid=#{pid}
+            </if>
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            ,update_time=now()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <sql id="listOrgCondition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="pid!=null">
+                AND pid=#{pid}
+            </if>
+            <if test="name!=null and name!=''">
+                AND `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="listOrganization" parameterType="secOrganization" resultType="secOrganization">
+        SELECT id,`name`,`desc`,status
+        FROM yilanwang.security_organization
+        <include refid="listOrgCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="countOrganization" parameterType="secOrganization" resultType="long">
+        SELECT COUNT(*) FROM yilanwang.security_organization
+        <include refid="listOrgCondition" />
+    </select>
+
+    <select id="findOrganizationByKey" parameterType="secOrganization" resultType="secOrganization">
+        SELECT * FROM yilanwang.security_organization WHERE `name`=#{name}
+        <if test="id!=null">
+            AND id!=#{id}
+        </if>
+    </select>
+
+    <select id="listOrgTree" resultType="secOrganization">
+        SELECT id,`name`,pid
+        FROM yilanwang.security_organization
+    </select>
+
+    <select id="countStaffByOrg" parameterType="secOrganization" resultType="long">
+        SELECT COUNT(*)
+        FROM yilanwang.security_staff_org
+        WHERE orgId=#{id}
+    </select>
+
+    <select id="listRoleByOrg" parameterType="secOrganization" resultType="secRole">
+        SELECT sr.id AS id
+        FROM yilanwang.security_org_role sor JOIN yilanwang.security_role sr ON sor.roleId=sr.id
+        WHERE sor.orgId=#{id}
+        <if test="status!=null">
+            AND sr.status=#{status}
+        </if>
+    </select>
+
+    <insert id="insertOrgRole" parameterType="secOrganization">
+        INSERT IGNORE INTO yilanwang.security_org_role
+        <foreach collection="roles" item="item" separator="," open="VALUES ">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOrgRole" parameterType="secOrganization">
+        DELETE FROM yilanwang.security_org_role WHERE orgId=#{id}
+        AND roleId IN
+        <foreach collection="roles" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOrgRoleByOrg" parameterType="secOrganization">
+        DELETE FROM yilanwang.security_org_role WHERE orgId=#{id}
+    </delete>
+
+    <select id="listOrgByStaff" parameterType="secStaff" resultType="secOrganization">
+        SELECT orgId AS id
+        FROM yilanwang.security_staff_org sso
+        WHERE staffId=#{id}
+    </select>
+
+    <insert id="insertStaffOrg" parameterType="secStaff">
+        INSERT IGNORE INTO yilanwang.security_staff_org
+        <foreach collection="organizations" item="item" separator="," open="VALUES ">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="deleteStaffOrg" parameterType="secStaff">
+        DELETE FROM yilanwang.security_staff_org WHERE staffId=#{id}
+        AND orgId IN
+        <foreach collection="organizations" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteStaffOrgByStaff" parameterType="secStaff">
+        DELETE FROM yilanwang.security_staff_org WHERE staffId=#{id}
+    </delete>
+
+    <resultMap id="staffMap" type="secStaff" autoMapping="true">
+        <id property="id" column="id" />
+        <collection property="organizations" ofType="secOrganization" autoMapping="true" columnPrefix="o_" />
+    </resultMap>
+
+    <select id="findStaffByUsername" parameterType="secStaff" resultMap="staffMap">
+        SELECT ss.*,
+        so.id AS o_id,so.status AS o_status
+        FROM yilanwang.security_staff ss
+        LEFT JOIN yilanwang.security_staff_org sso ON ss.id=sso.staffId
+        LEFT JOIN yilanwang.security_organization so ON sso.orgId=so.id
+        WHERE ss.username=#{username}
+    </select>
+
+    <select id="listRoleByReq" parameterType="secResource" resultType="secRole">
+        SELECT srr.roleId AS id
+        FROM yilanwang.security_role_res srr JOIN yilanwang.security_resource sr ON srr.resId=sr.id
+        WHERE sr.url=#{url} AND sr.method=#{method}
+    </select>
+
+    <resultMap id="resourceMap" type="secResource" autoMapping="true">
+        <id property="id" column="id" />
+        <collection property="roles" ofType="secRole" autoMapping="true" columnPrefix="r_" />
+    </resultMap>
+
+    <select id="listRoleByResPid" parameterType="secResource" resultMap="resourceMap">
+        SELECT sr.id,sr.key,srr.roleId AS r_id
+        FROM yilanwang.security_resource sr LEFT JOIN yilanwang.security_role_res srr ON sr.id=srr.resId
+        WHERE sr.pid=#{pid}
+    </select>
+
+    <select id="listRoleByResPkey" parameterType="secResource" resultMap="resourceMap">
+        SELECT sr2.id,sr2.key,srr.roleId AS r_id
+        FROM yilanwang.security_resource sr1
+        JOIN yilanwang.security_resource sr2 ON sr1.id=sr2.pid
+        LEFT JOIN yilanwang.security_role_res srr ON sr2.id=srr.resId
+        WHERE sr1.key=#{key}
+    </select>
+
+    <select id="findResourceByReq" parameterType="secResource" resultType="secResource">
+        SELECT id,`name`,log
+        FROM yilanwang.security_resource
+        WHERE url=#{url} AND method=#{method}
+    </select>
+</mapper>

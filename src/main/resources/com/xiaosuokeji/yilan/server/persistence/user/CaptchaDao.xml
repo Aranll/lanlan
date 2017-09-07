@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.user.CaptchaDao">
+
+	<insert id="save" parameterType="captcha">
+		INSERT IGNORE INTO yilanwang.captcha(mobile,`type`,content)
+		VALUES (#{mobile},#{type},#{content})
+	</insert>
+
+	<delete id="remove" parameterType="captcha">
+		DELETE FROM yilanwang.captcha
+		WHERE mobile=#{mobile} AND `type`=#{type}
+	</delete>
+
+	<delete id="removeExpire" parameterType="date">
+		DELETE FROM yilanwang.captcha
+		WHERE DATE_ADD(create_time,INTERVAL 2 MINUTE) &lt; #{expireTime}
+	</delete>
+
+	<select id="list" parameterType="captcha" resultType="captcha">
+		SELECT *
+		FROM yilanwang.captcha
+		WHERE mobile=#{mobile} AND `type`=#{type}
+		<if test="content!=null">
+			AND content=#{content}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.resource.WebsiteDao">
+
+    <insert id="save" parameterType="website">
+        INSERT IGNORE INTO yilanwang.website(`name`,url,developer,category_id,hot,recommend)
+        VALUES (#{name},#{url},#{developer},#{category.id},#{hot},#{recommend})
+    </insert>
+
+    <delete id="remove" parameterType="website">
+        DELETE FROM yilanwang.website
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="website">
+        UPDATE yilanwang.website
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="url!=null">
+                ,url=#{url}
+            </if>
+            <if test="developer!=null">
+                ,developer=#{developer}
+            </if>
+            <if test="category!=null and category.id!=null">
+                ,category_id=#{category.id}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                ,recommend=#{recommend}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <resultMap id="websiteMap" type="website" autoMapping="true">
+        <association property="category" javaType="category" autoMapping="true" columnPrefix="c_" />
+    </resultMap>
+
+    <select id="get" parameterType="website" resultMap="websiteMap">
+        SELECT w.*,
+        c.id AS c_id,c.name AS c_name
+        FROM yilanwang.website w
+        JOIN yilanwang.category c ON w.category_id=c.id
+        WHERE w.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.website w
+        JOIN yilanwang.category c ON w.category_id=c.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND w.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND w.name=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND w.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND w.hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND w.recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND w.category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND w.category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="website" resultMap="websiteMap">
+        SELECT w.*,
+        c.id AS c_id,c.name AS c_name
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" resultMap="websiteMap">
+        SELECT id,`name`,url,developer,category_id AS c_id
+        FROM yilanwang.website
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="website" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

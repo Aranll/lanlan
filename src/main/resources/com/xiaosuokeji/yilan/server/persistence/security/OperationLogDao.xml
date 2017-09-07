@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.security.OperationLogDao">
+
+    <insert id="save" parameterType="operationLog">
+        INSERT IGNORE INTO yilanwang.operation_log(operator_id,operator_name,operator_type,ip,url,operation)
+        VALUES (#{operatorId},#{operatorName},#{operatorType},#{ip},#{url},#{operation})
+    </insert>
+
+    <delete id="remove" parameterType="operationLog">
+        DELETE FROM yilanwang.operation_log
+        WHERE id=#{id}
+    </delete>
+
+    <select id="get" parameterType="operationLog" resultType="operationLog">
+        SELECT *
+        FROM yilanwang.operation_log
+        WHERE id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.operation_log
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.operatorId!=null and dynamic.operatorId!=''">
+                AND operator_id LIKE CONCAT('%',#{dynamic.operatorId},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.operatorName!=null and dynamic.operatorName!=''">
+                AND operator_name LIKE CONCAT('%',#{dynamic.operatorName},'%')
+            </if>
+            <if test="dynamic!=null and dynamic.operatorType!=null and dynamic.operatorType!=''">
+                AND operator_type=#{dynamic.operatorType}
+            </if>
+            <if test="dynamic!=null and dynamic.startTime!=null and dynamic.startTime!=''">
+                AND create_time &gt;= #{dynamic.startTime}
+            </if>
+            <if test="dynamic!=null and dynamic.endTime!=null and dynamic.endTime!=''">
+                AND create_time &lt; #{dynamic.endTime}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="operationLog" resultType="operationLog">
+        SELECT *
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="operationLog" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

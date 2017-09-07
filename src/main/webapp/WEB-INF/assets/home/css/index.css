@@ -1,0 +1,12 @@
+.hot-container{
+    width: 100%;
+    height: 50px;
+}
+
+.hot-container .title{
+    display: inline-block;
+    width: 180px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+}

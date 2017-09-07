@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.resource.BookDao">
+
+    <insert id="save" parameterType="book">
+        INSERT IGNORE INTO yilanwang.book(`name`,author,publisher,publish_date,cover,pdf,category_id,profile,hot,recommend,
+        access_vip_level)
+        VALUES (#{name},#{author},#{publisher},#{publishDate},#{cover},#{pdf},#{category.id},#{profile},#{hot},
+        #{recommend},#{accessVipLevel})
+    </insert>
+
+    <delete id="remove" parameterType="book">
+        DELETE FROM yilanwang.book
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="book">
+        UPDATE yilanwang.book
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="author!=null">
+                ,author=#{author}
+            </if>
+            <if test="publisher!=null">
+                ,publisher=#{publisher}
+            </if>
+            <if test="publishDate!=null">
+                ,publish_date=#{publishDate}
+            </if>
+            <if test="cover!=null">
+                ,cover=#{cover}
+            </if>
+            <if test="pdf!=null">
+                ,pdf=#{pdf}
+            </if>
+            <if test="category!=null and category.id!=null">
+                ,category_id=#{category.id}
+            </if>
+            <if test="profile!=null">
+                ,profile=#{profile}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                ,recommend=#{recommend}
+            </if>
+            <if test="accessVipLevel!=null">
+                ,access_vip_level=#{accessVipLevel}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <resultMap id="bookMap" type="book" autoMapping="true">
+        <association property="category" javaType="category" autoMapping="true" columnPrefix="c_" />
+    </resultMap>
+
+    <select id="get" parameterType="book" resultMap="bookMap">
+        SELECT b.*,
+        c.id AS c_id,c.name AS c_name
+        FROM yilanwang.book b
+        JOIN yilanwang.category c ON b.category_id=c.id
+        WHERE b.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.book b
+        JOIN yilanwang.category c ON b.category_id=c.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND b.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND b.name=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND b.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND b.hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND b.recommend=#{recommend}
+            </if>
+            <if test="accessVipLevel!=null">
+                AND b.access_vip_level=#{accessVipLevel}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND b.category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND b.category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="book" resultMap="bookMap">
+        SELECT b.*,
+        c.id AS c_id,c.name AS c_name
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" resultMap="bookMap">
+        SELECT id,`name`,cover,pdf,category_id AS c_id
+        FROM yilanwang.book
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="book" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

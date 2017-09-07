@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.resource.VideoDao">
+
+    <insert id="save" parameterType="video">
+        INSERT IGNORE INTO yilanwang.video(`name`,author,origin,cover,url,category_id,profile,hot,recommend,
+        access_vip_level)
+        VALUES (#{name},#{author},#{origin},#{cover},#{url},#{category.id},#{profile},#{hot},#{recommend},
+        #{accessVipLevel})
+    </insert>
+
+    <delete id="remove" parameterType="video">
+        DELETE FROM yilanwang.video
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="video">
+        UPDATE yilanwang.video
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="author!=null">
+                ,author=#{author}
+            </if>
+            <if test="origin!=null">
+                ,origin=#{origin}
+            </if>
+            <if test="cover!=null">
+                ,cover=#{cover}
+            </if>
+            <if test="url!=null">
+                ,url=#{url}
+            </if>
+            <if test="category!=null and category.id!=null">
+                ,category_id=#{category.id}
+            </if>
+            <if test="profile!=null">
+                ,profile=#{profile}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                ,recommend=#{recommend}
+            </if>
+            <if test="accessVipLevel!=null">
+                ,access_vip_level=#{accessVipLevel}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <resultMap id="videoMap" type="video" autoMapping="true">
+        <association property="category" javaType="category" autoMapping="true" columnPrefix="c_" />
+    </resultMap>
+
+    <select id="get" parameterType="video" resultMap="videoMap">
+        SELECT v.*,
+        c.id AS c_id,c.name AS c_name
+        FROM yilanwang.video v
+        JOIN yilanwang.category c ON v.category_id=c.id
+        WHERE v.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.video v
+        JOIN yilanwang.category c ON v.category_id=c.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND v.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND v.name=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND v.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="origin!=null">
+                AND v.origin=#{origin}
+            </if>
+            <if test="hot!=null">
+                AND v.hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND v.recommend=#{recommend}
+            </if>
+            <if test="accessVipLevel!=null">
+                AND v.access_vip_level=#{accessVipLevel}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND v.category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND v.category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="video" resultMap="videoMap">
+        SELECT v.*,
+        c.id AS c_id,c.name AS c_name
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" resultMap="videoMap">
+        SELECT id,`name`,cover,url,category_id AS c_id
+        FROM yilanwang.video
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="video" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

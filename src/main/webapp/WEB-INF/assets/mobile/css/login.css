@@ -1,0 +1,82 @@
+.logo {
+    text-align: center;
+    padding-top: 7%;
+    margin-bottom: 10%;
+}
+.logo img{
+    width: 120px;
+}
+.text-left {
+    display: inline;
+    float: left;
+    text-decoration: none;
+    font-size: 10px;
+    color: #33AC79;
+    letter-spacing: 0.68px;
+}
+.text-right {
+    display: inline;
+    float: right;
+    text-decoration: none;
+    font-size: 10px;
+    color: #33AC79;
+    letter-spacing: 0.68px;
+}
+
+#password,
+#phone-number {
+    margin-bottom: 10px;
+}
+
+.form-group a {
+    margin-bottom: 20px;
+}
+
+input[value="登录"] {
+    height: 49px;
+    width: 100%;
+    background: #33AC79;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #FFFFFF;
+    letter-spacing: 0.34px;
+    outline: none;
+    border: none;
+}
+
+#phone-number {
+    position: relative;
+}
+
+.input-icon{
+    width: 22px;
+    height: 22px;
+    transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%);	/* IE 9 */
+    -moz-transform:translate(-50%,-50%);	/* Firefox */
+    -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+    -o-transform:translate(-50%,-50%); 	/* Opera */
+}
+
+#img-phone {
+    position: absolute;
+    top:50%;
+    left: 7.05%;
+}
+
+#password {
+    position: relative;
+}
+
+#img-password {
+    /*z-index: 5;*/
+    position: absolute;
+    top:50%;
+    left: 7.05%;
+}
+
+.input-style {
+    padding-left: 14.1%;
+    font-size: 11px;
+    box-shadow: none;
+}

@@ -1,0 +1,90 @@
+
+input::-webkit-input-placeholder { /* WebKit browsers*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input::-moz-placeholder { /* Mozilla Firefox 19+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-ms-input-placeholder { /* Internet Explorer 10+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+#software-box {
+    margin-top: 20px;
+    background: #FFFFFF;
+    width: 100%;
+}
+
+#software-box .software .QRcode {
+    box-sizing:border-box;
+    display: inline-block;
+    height: 180px;
+    padding: 12px 3.1%;
+}
+
+#software-box .software .QRcode img {
+    width: 156px;
+    height: 156px;
+}
+
+#software-box .software .company {
+    box-sizing: border-box;
+    display: inline-block;
+    height: 180px;
+    width: auto;
+    padding-top:12px;
+    vertical-align: top;
+}
+
+.classify-active {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+}
+.classify-active a {
+    box-sizing: border-box;
+    padding: 10px 26px;
+    font-size: 24px;
+    color: #FFFFFF;
+    letter-spacing: -0.7px;
+    background: #33AC79;
+    border-radius: 8px;
+
+}
+
+#software-box .software {
+    box-sizing: border-box;
+    height: 180px;
+    width: 100%;
+    border: 1px solid #DCDCDC;
+}
+
+#software-box .software .company h4 {
+    box-sizing:border-box;
+    height: 90px;
+    font-size: 30px;
+    color: #666666;
+    letter-spacing: -0.88px;
+}
+
+#software-box .software .company h5 {
+    box-sizing:border-box;
+    height: 90px;
+    font-size: 28px;
+    color: #999999;
+    letter-spacing: -0.82px;
+}

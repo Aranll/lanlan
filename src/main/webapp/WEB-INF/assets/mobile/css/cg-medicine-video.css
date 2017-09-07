@@ -1,0 +1,91 @@
+
+input::-webkit-input-placeholder { /* WebKit browsers*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input::-moz-placeholder { /* Mozilla Firefox 19+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-ms-input-placeholder { /* Internet Explorer 10+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+.catagory .content .leader {
+    font-size: 28px;
+    color: #333333;
+    letter-spacing: -0.82px;
+}
+
+.catagory .content a:nth-child(3),
+.catagory .content a:nth-child(4) {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+    line-height: 88px;
+    font-size: 24px;
+    color: #666666;
+    letter-spacing: -0.7px;
+}
+
+.classify-active {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+}
+
+.classify-active a {
+
+    box-sizing: border-box;
+    padding: 10px 26px;
+    font-size: 24px;
+    color: #FFFFFF;
+    letter-spacing: -0.7px;
+    background: #33AC79;
+    border-radius: 8px;
+
+}
+
+/*图书详情*/
+.video-box {
+    width: 100%;
+    display: inline-block;
+
+    text-align: center;
+}
+
+.video-box .video {
+    width: 45.3%;
+    display: inline-block;
+    margin-top: 1.8%;
+}
+
+.video-box .video video {
+    background: #D8D8D8;
+}
+
+.video-box .video h4 {
+    font-size: 28px;
+    color: #666666;
+    letter-spacing: -0.82px;
+}
+
+.video-box .video span {
+    font-size: 24px;
+    color: #999999;
+    letter-spacing: -0.82px;
+}
+
+

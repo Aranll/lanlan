@@ -1,0 +1,81 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input::-webkit-input-placeholder { /* WebKit browsers*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input::-moz-placeholder { /* Mozilla Firefox 19+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+input:-ms-input-placeholder { /* Internet Explorer 10+*/
+    font-size: 28px;
+    color: #CCCCCC;
+    letter-spacing: -0.15px;
+}
+
+.catagory .content .leader {
+    font-size: 28px;
+    color: #333333;
+    letter-spacing: -0.82px;
+}
+
+.catagory .content a:nth-child(3),
+.catagory .content a:nth-child(4) {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+    line-height: 88px;
+    font-size: 24px;
+    color: #666666;
+    letter-spacing: -0.7px;
+}
+
+.classify-active {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+}
+
+.classify-active a {
+
+    box-sizing: border-box;
+    padding: 10px 26px;
+    font-size: 24px;
+    color: #FFFFFF;
+    letter-spacing: -0.7px;
+    background: #33AC79;
+    border-radius: 8px;
+
+}
+
+/*瀑布流图片样式*/
+.container-fluid {
+    width: 100%;
+}
+
+.box {
+    box-sizing: border-box;
+
+    float: left;
+    width: 50%;
+    padding: 15px;
+}
+
+.box img {
+    width: 100%;
+    margin: 0 auto;
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.user.TokenDao">
+
+    <insert id="save" parameterType="token" keyProperty="id" useGeneratedKeys="true">
+        INSERT IGNORE INTO yilanwang.token(userId,content)
+        VALUES (#{userId},#{content})
+    </insert>
+
+    <delete id="remove" parameterType="token">
+        DELETE FROM yilanwang.token
+        WHERE id=#{id}
+    </delete>
+
+    <delete id="removeExpire" parameterType="date">
+        DELETE FROM yilanwang.token
+        WHERE DATE_ADD(update_time,INTERVAL 30 DAY) &lt; #{expireTime}
+    </delete>
+
+    <select id="get" parameterType="token" resultType="token">
+        SELECT *
+        FROM yilanwang.token
+        WHERE id=#{id}
+    </select>
+
+    <select id="getByContent" parameterType="token" resultType="token">
+        SELECT *
+        FROM yilanwang.token
+        WHERE content=#{content}
+    </select>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.resource.CategoryDao">
+
+    <insert id="save" parameterType="category">
+        INSERT IGNORE INTO yilanwang.category(`type`,`name`,status,hot,seq,parent_id)
+        VALUES (#{type},#{name},#{status},#{hot},#{seq},#{parent.id})
+    </insert>
+
+    <delete id="remove" parameterType="category">
+        DELETE FROM yilanwang.category
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="category">
+        UPDATE yilanwang.category
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="seq!=null">
+                ,seq=#{seq}
+            </if>
+            <if test="parent!=null and parent.id!=null">
+                ,parent_id=#{parent.id}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateStatus" parameterType="category">
+        UPDATE yilanwang.category
+        SET status=#{status},
+        update_time=NOW()
+        <if test="categories!=null and categories.size>0">
+            WHERE id IN
+            <foreach collection="categories" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updateHot" parameterType="category">
+        UPDATE yilanwang.category
+        SET hot=#{hot},
+        update_time=NOW()
+        <if test="categories!=null and categories.size>0">
+            WHERE id IN
+            <foreach collection="categories" open="(" item="item" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+
+    <resultMap id="categoryMap" type="category" autoMapping="true">
+        <association property="parent" javaType="category" autoMapping="true" columnPrefix="p_" />
+    </resultMap>
+
+    <select id="get" parameterType="category" resultMap="categoryMap">
+        SELECT c.*,
+        c.parent_id AS p_id,p.name AS p_name,p.status AS p_status
+        FROM yilanwang.category c
+        LEFT JOIN yilanwang.category p ON c.parent_id=p.id
+        WHERE c.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.category c
+        LEFT JOIN yilanwang.category p ON c.parent_id=p.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND c.id=#{id}
+            </if>
+            <if test="type!=null">
+                AND c.type=#{type}
+            </if>
+            <if test="name!=null and name!=''">
+                AND c.name=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND c.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="status!=null">
+                AND c.status=#{status}
+            </if>
+            <if test="hot!=null">
+                AND c.hot=#{hot}
+            </if>
+            <if test="parent!=null and parent.id!=null">
+                AND c.parent_id=#{parent.id}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="category" resultMap="categoryMap">
+        SELECT c.*,
+        p.id AS p_id,p.name AS p_name
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" parameterType="category" resultType="category">
+        SELECT id,`name`
+        FROM yilanwang.category
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="type!=null">
+                AND `type`=#{type}
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+            <if test="parent!=null and parent.id!=null">
+                AND parent_id=#{parent.id}
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listTree" parameterType="category" resultMap="categoryMap">
+        SELECT id,`name`,seq,parent_id AS p_id
+        FROM yilanwang.category
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="type!=null">
+                AND `type`=#{type}
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+    </select>
+
+    <select id="count" parameterType="category" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

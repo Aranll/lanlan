@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.goods.GoodsDao">
+
+    <insert id="save" parameterType="goods">
+        INSERT IGNORE INTO yilanwang.goods(`name`,price,duration,status,`desc`,seq)
+        VALUES (#{name},#{price},#{duration},#{status},#{desc},#{seq})
+    </insert>
+
+    <delete id="remove" parameterType="goods">
+        DELETE FROM yilanwang.goods
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="goods">
+        UPDATE yilanwang.goods
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="price!=null">
+                ,price=#{price}
+            </if>
+            <if test="duration!=null">
+                ,duration=#{duration}
+            </if>
+            <if test="status!=null">
+                ,status=#{status}
+            </if>
+            <if test="desc!=null">
+                ,`desc`=#{desc}
+            </if>
+            <if test="seq!=null">
+                ,seq=#{seq}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <select id="get" parameterType="goods" resultType="goods">
+        SELECT *
+        FROM yilanwang.goods
+        WHERE id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.goods
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND `name`=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="goods" resultType="goods">
+        SELECT *
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" parameterType="goods" resultType="goods">
+        SELECT id,`name`,price
+        FROM yilanwang.goods
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="status!=null">
+                AND status=#{status}
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="goods" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

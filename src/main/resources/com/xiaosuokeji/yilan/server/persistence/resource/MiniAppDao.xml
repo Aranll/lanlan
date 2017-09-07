@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.resource.MiniAppDao">
+
+    <insert id="save" parameterType="miniApp">
+        INSERT IGNORE INTO yilanwang.mini_app(`name`,qr_code,developer,category_id,hot,recommend)
+        VALUES (#{name},#{qrCode},#{developer},#{category.id},#{hot},#{recommend})
+    </insert>
+
+    <delete id="remove" parameterType="miniApp">
+        DELETE FROM yilanwang.mini_app
+        WHERE id=#{id}
+    </delete>
+
+    <update id="update" parameterType="miniApp">
+        UPDATE yilanwang.mini_app
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name!=null">
+                ,`name`=#{name}
+            </if>
+            <if test="qrCode!=null">
+                ,qr_code=#{qrCode}
+            </if>
+            <if test="developer!=null">
+                ,developer=#{developer}
+            </if>
+            <if test="category!=null and category.id!=null">
+                ,category_id=#{category.id}
+            </if>
+            <if test="hot!=null">
+                ,hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                ,recommend=#{recommend}
+            </if>
+            ,update_time=NOW()
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <resultMap id="miniAppMap" type="miniApp" autoMapping="true">
+        <association property="category" javaType="category" autoMapping="true" columnPrefix="c_" />
+    </resultMap>
+
+    <select id="get" parameterType="miniApp" resultMap="miniAppMap">
+        SELECT m.*,
+        c.id AS c_id,c.name AS c_name
+        FROM yilanwang.mini_app m
+        JOIN yilanwang.category c ON m.category_id=c.id
+        WHERE m.id=#{id}
+    </select>
+
+    <sql id="listCondition">
+        FROM yilanwang.mini_app m
+        JOIN yilanwang.category c ON m.category_id=c.id
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND m.id=#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                AND m.name=#{name}
+            </if>
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND m.name LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND m.hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND m.recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND m.category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND m.category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="list" parameterType="miniApp" resultMap="miniAppMap">
+        SELECT m.*,
+        c.id AS c_id,c.name AS c_name
+        <include refid="listCondition" />
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="listCombo" resultMap="miniAppMap">
+        SELECT id,`name`,qr_code,developer,category_id AS c_id
+        FROM yilanwang.mini_app
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="dynamic!=null and dynamic.name!=null and dynamic.name!=''">
+                AND `name` LIKE CONCAT('%',#{dynamic.name},'%')
+            </if>
+            <if test="hot!=null">
+                AND hot=#{hot}
+            </if>
+            <if test="recommend!=null">
+                AND recommend=#{recommend}
+            </if>
+            <if test="category!=null and category.id!=null and categories==null">
+                AND category_id=#{category.id}
+            </if>
+            <if test="categories!=null and categories.size>0">
+                AND category_id IN
+                <foreach collection="categories" open="(" item="item" separator="," close=")">
+                    <if test="item.id!=null">
+                        #{item.id}
+                    </if>
+                </foreach>
+            </if>
+        </trim>
+        <include refid="BaseMapper.sort" />
+        <include refid="BaseMapper.limit" />
+    </select>
+
+    <select id="count" parameterType="miniApp" resultType="long">
+        SELECT COUNT(*)
+        <include refid="listCondition" />
+    </select>
+</mapper>

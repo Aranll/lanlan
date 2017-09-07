@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医览网</title>
+    <!--<link rel="icon" href="../../assets/img/address.png">-->
+    <link rel="stylesheet" href="../../assets/css/lyz-style.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.css">
+    <script src="../../assets/js/jquery-3.1.1.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/navAndHot.js"></script>
+</head>
+<body>
+<div class="yilan-head">
+    <div class="yilan-nav">
+        <ul id="a_nav" class="nav navbar-nav">
+            <li>
+                <a href="http://localhost:63342/yilanwang/view/website/index.html">首页</a>
+            </li>
+            <li>
+                <a href="http://localhost:63342/yilanwang/view/software/index.html">医学软件</a>
+            </li>
+            <li>
+                <a href="../periodical/index.html">医学期刊</a>
+            </li>
+            <li>
+                <a href="../periodical/index.html">医学图片</a>
+            </li>
+            <li>
+                <a href="../book/index.html">医学图书</a>
+            </li>
+            <li>
+                <a href="../video/index.html">医学讲坛</a>
+            </li>
+        </ul>
+        <a class="pull-right" href="javascript:void(0);">注册</a>
+        <a class="pull-right" onclick="onc()">登录</a>
+    </div>
+</div>
+
+<div class="yilan-center clearfix">
+    <a href="http://www.baidu.com"><img src="../../assets/img/logo.png" style="margin-top: 19px;margin-left: 7px"></a>
+    <div style="text-align: center;font-size: 18px;color: #333333 ">
+        <h3 style="margin-bottom: 30px;margin-top: 0">升级会员</h3>
+        <div style="text-align: center;margin: 0 auto;width: 580px;margin-bottom: ">
+            <div class="charge-div">
+                <span style="font-size: 24px;display: block;text-align: left">套餐选择</span>
+                <div style="margin-top: 14px">
+                    <div class="radio-div" ><span>30天</span><input name="money" type="hidden" value="30"></div>
+                    <div class="radio-div" ><span>60天</span><input name="money" type="hidden" value="60"></div>
+                    <div class="radio-div" ><span>90天</span><input name="money" type="hidden" value="90"></div>
+                    <div class="radio-div" ><span>365天</span><input name="money" type="hidden" value="365"></div>
+                </div>
+            </div>
+            <div class="charge-div">
+                <span style="font-size: 24px;display: block;text-align: left">付款方式</span>
+                <div style="margin-top: 14px">
+                    <div class="radio-div"><span>微信</span><input type="hidden" value="1"></div>
+                    <div class="radio-div" ><span>支付宝</span><input type="hidden" value="1"></div>
+                    <div class="radio-div" ><span>网银</span><input type="hidden" value="1"></div>
+                </div>
+            </div>
+            <div class="charge-div">
+                <span>金额：</span><span id="charge-money" class="charge-money">￥0</span>
+            </div>
+            <div class="charge-div" style="text-align: right">
+                <button type="button">付款</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer style="clear: both;margin-bottom:0">
+    <div class="footer-box">
+        <div class="footer-box-left">
+            <img src="../../assets/img/logowhite.png" alt="">
+            <ul>
+                <li>
+                    <a href="">关于我们</a>
+                </li>
+                <li>
+                    <a href="">医学邦</a>
+                </li>
+                <li>
+                    <a href="">仲景在线</a>
+                </li>
+                <li>
+                    <a href="">医人e馆</a>
+                </li>
+                <li>
+                    <a href="">健康商城</a>
+                </li>
+            </ul>
+            <div id="horizontal-line"></div>
+            <section>
+                <p>广州小梭信息科技有限公司。京ICP备号XXXXXXXXXX号-X 京公网安备 XXXXXXXX</p>
+            </section>
+        </div>
+        <div class="footer-box-right">
+            <img src="../../assets/img/codesmall.png" alt="">
+            <ul>
+                <li>
+                    <div>
+                        <img class="address-img" src="../../assets/img/phone.png" alt="">
+                        <span>020-88888888</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <img class="address-img" src="../../assets/img/qq.png" alt="">
+                        <span>8888555566</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <img class="address-img" src="../../assets/img/mail.png" alt="">
+                        <span>8888555566@163.com</span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <img class="address-img" src="../../assets/img/address.png" alt="">
+                        <span>广东省广州市海珠区赤岗街道456号</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<div class="modal fade" id="signUp" data-backdrop="static" role="dialog">
+    <div class="modal-dialog" role="document" style="margin-top: 160px;width: 500px;text-align: center">
+        <div class="modal-content">
+            <div class="modal-header" style="border: 0">
+                <button type="button" style="color: #00A963;" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" style="text-align: center;font-size: 24px;color: #333333">登录</h4>
+            </div>
+            <div class="modal-body" style="border: 0;">
+                <div style="position: relative;margin-bottom: 20px">
+                    <img src="../../assets/img/user.png" style="position: absolute;left: 22px;top:10px">
+                    <input type="text" style="padding-left: 42px;width: 440px;height: 50px;" placeholder="请输入帐号">
+                </div>
+                <div style="position: relative;margin-bottom: 20px">
+                    <img src="../../assets/img/key.png" style="position: absolute;left: 22px;top:10px">
+                    <input type="text" style="padding-left: 42px;width: 440px;height: 50px;" placeholder="请输入帐号">
+                </div>
+                <div style="text-align: right">
+                    <span class="pull-left" style="margin: -10px 0 -15px 15px;text-decoration: none"><a
+                            style="color: #33AC79">短信登录</a></span>
+                    <span class="pull-right" style="margin: -10px 15px -15px 0"><a
+                            style="color: #33AC79">忘记密码?</a></span>
+                </div>
+            </div>
+            <div class="modal-footer" style="border: 0;clear: both;margin-top: -10px;text-align: center">
+                <button type="button" class="btn"
+                        style="width: 440px;height: 50px;background-color: #33AC79;color: #FFFFFF"
+                        onclick="submitRemove()">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+//    var changeCheck = function(e) {
+//        $(e).siblings().each(function (i,e1) {
+//            if($(e1).hasClass('radio-div-check'))
+//                $(e1).removeClass('radio-div-check');
+//        });
+//        $(e).addClass('radio-div-check');
+//    }
+
+    var changeCheck = function(e) {
+        $(e).siblings().each(function () {
+            if($(this).hasClass('radio-div-check'))
+                $(this).removeClass('radio-div-check');
+        });
+        $(e).addClass('radio-div-check');
+        if($(e).find("input[name='money']")!=undefined){
+            var a = $($(e).find("input[name='money']")[0]).attr('value');
+
+            $('#charge-money').html(a);
+
+        }
+        return;
+    }
+    $(function () {
+        $('.radio-div').each(function (i,e) {
+            $(e).on("click",function(){
+                changeCheck(this);
+            });
+        });
+    })
+
+
+
+</script>
+
+</html>

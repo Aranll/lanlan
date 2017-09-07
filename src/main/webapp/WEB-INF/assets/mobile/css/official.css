@@ -1,0 +1,50 @@
+
+.category{
+    background: rgb(240, 240, 240);
+}
+.category .category-box{
+    background: #FFF;
+}
+
+.official-box {
+    margin-top: 10px;
+    background: #FFFFFF;
+    width: 100%;
+    display: none;
+}
+.official-box .official{
+    border-bottom: 1px solid #DCDCDC;
+}
+.official-box .official .QRcode {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 78px;
+    height: 78px;
+    margin: 6px 10px;
+}
+
+.official-box .official .QRcode img {
+    width: 100%;
+    height: 100%;
+}
+
+.official-box .official .company {
+    box-sizing: border-box;
+    display: inline-block;
+    height: 90px;
+    width: auto;
+    padding-top: 12px;
+    vertical-align: top;
+}
+.official-box .official .company h4{
+    font-size: 15px;
+    color: #666;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+.official-box .official .company h5{
+    font-size: 14px;
+    color: #999;
+    font-weight: normal;
+}
+

@@ -1,0 +1,77 @@
+.container {
+    width: 1200px !important;
+}
+
+.header {
+    border-bottom: 2px solid #3a7d76;
+    height: 137px;
+}
+
+.header .logo {
+    width: 180px;
+    margin: 30px 0;
+}
+
+.header .h-nav {
+    width: 810px;
+    margin: 30px auto;
+    padding: 0;
+}
+
+.header .h-nav li {
+    list-style: none;
+    width: 135px;
+    float: left;
+
+    text-align: center;
+}
+
+.header .h-nav li:hover {
+    background: inherit;
+}
+
+.header .h-nav li > a {
+    font-size: 16px;
+    line-height: 45px;
+    padding: 0;
+}
+
+.header .h-nav li > a:hover {
+    color: #3a7d76;
+}
+
+.header .login-register-box {
+    text-align: right;
+    width: 180px;
+    margin: 30px auto;
+}
+
+.header .login-register-box a {
+    display: inline-block;
+    line-height: 45px;
+}
+
+.header .login-register-box a:hover {
+    color: #3a7d76;
+}
+
+.header .searchBar{
+    position: absolute;
+    right:15px;
+    bottom: 20px;
+}
+.header .searchBar input[type=search]{
+    border:none;
+    border-bottom: 1px solid #777;
+    line-height: 30px;
+    width: 150px;
+}
+
+.header .searchBar input[type=submit]{
+    border: none;
+    background: url("../img/icon_search.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    vertical-align: middle;
+}

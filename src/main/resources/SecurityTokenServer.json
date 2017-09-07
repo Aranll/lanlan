@@ -1,0 +1,21 @@
+{
+  "AccessKeyID": "LTAIHuz7iFwUjC2G",
+  "AccessKeySecret": "QFafJWMC8R6SCLQPpqZd4gqCHMhGC8",
+  "RoleArn": "acs:ram::1362484620841928:role/aliyunosstokenrole",
+  "TokenExpireTime": 900,
+  "Policy": {
+    "Statement": [
+      {
+        "Action": [
+          "oss:*"
+        ],
+        "Effect": "Allow",
+        "Resource": [
+          "acs:oss:*:*:shuttle-yilan/*",
+          "acs:oss:*:*:shuttle-yilan"
+        ]
+      }
+    ],
+    "Version": "1"
+  }
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaosuokeji.yilan.server.dao.system.SystemPropertyDao">
+
+    <insert id="save" parameterType="systemProperty">
+        INSERT INTO yilanwang.system_property(id,web_name,mini_app_qrcodes,mini_app_names,email,address,phone,qq,copyright,
+        record_number,license,about_us,partners,partner_urls,qrCode)
+        VALUES (1,#{webName},#{miniAppQrcodes},#{miniAppNames},#{email},#{address},#{phone},#{qq},#{copyright},
+        #{recordNumber},#{license},#{aboutUs},#{partners},#{partnerUrls},#{qrCode})
+        ON DUPLICATE KEY UPDATE
+        web_name=#{webName},
+        mini_app_qrcodes=#{miniAppQrcodes},
+        mini_app_names=#{miniAppNames},
+        email=#{email},
+        address=#{address},
+        phone=#{phone},
+        qq=#{qq},
+        copyright=#{copyright},
+        record_number=#{recordNumber},
+        license=#{license},
+        about_us=#{aboutUs},
+        partners=#{partners},
+        partner_urls=#{partnerUrls},
+        qrCode=#{qrCode},
+        update_time=NOW()
+    </insert>
+
+    <select id="get" resultType="systemProperty">
+        SELECT *
+        FROM yilanwang.system_property
+        WHERE id=1
+    </select>
+</mapper>
